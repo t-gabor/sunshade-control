@@ -1,0 +1,40 @@
+{
+  "name": "sunshade-control",
+  "version": "0.0.1",
+  "engines": {
+    "node": "6.8.0"
+  },
+  "description": "An automatic weather aware sunshade control web app to be run on RPi, with Node.js. A remote supporting open/close commands should be hooked up on the GPIO.",
+  "main": "server/app.js",
+  "scripts": {
+    "start": "node server/app.js",
+    "test": "node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t-gabor/sunshade-control.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/t-gabor/sunshade-control/issues"
+  },
+  "homepage": "https://github.com/t-gabor/sunshade-control#readme",
+  "dependencies": {
+    "body-parser": "1.15.2",
+    "bunyan": "1.8.1",
+    "express": "4.14.0",
+    "method-override": "2.3.6",
+    "node-fetch": "1.6.3"
+  },
+  "devDependencies": {
+    "eslint": "3.8.0",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-config-standard": "6.2.0",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "2.2.3",
+    "eslint-plugin-react": "6.4.1",
+    "eslint-plugin-standard": "2.0.1",
+    "mocha": "3.1.2"
+  }
+}
