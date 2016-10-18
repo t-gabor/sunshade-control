@@ -1,5 +1,4 @@
 const Server = require("../server/server");
-const http = require("http");
 const request = require("supertest");
 
 describe("#/api/control", () => {
@@ -19,7 +18,7 @@ describe("#/api/control", () => {
     });
 
     it("should respond 400 to marlformed request", (done) => {
-        request(server.app)        
+        request(server.app)
             .post("/api/control")
             .set("Content-Type", "application/json")
             .send("a=1")
