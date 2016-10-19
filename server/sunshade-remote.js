@@ -3,15 +3,14 @@ class SunshadeRemote {
         this.buttons = buttons;
         this.auto = false;
 
-        const self = this;
         emitter.on("control:open", () => {
-            if (self.auto) {
-                self.buttons.open();
+            if (this.auto) {
+                this.buttons.open();
             }
         });
         emitter.on("control:close", () => {
-            if (self.auto) {
-                self.buttons.close();
+            if (this.auto) {
+                this.buttons.close();
             }
         });
     }
