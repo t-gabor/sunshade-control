@@ -1,9 +1,9 @@
-const SunshadeRemote = require("../server/sunshade-remote");
+const sunshadeRemote = require("../server/sunshade-remote");
 const events = require("events");
 
-describe("SunshadeRemote", () => {
+describe("sunshadeRemote", () => {
     let eventEmitter;
-    let sunshadeRemote;
+    let remote;
     let buttons;
 
     beforeEach(() => {
@@ -12,41 +12,41 @@ describe("SunshadeRemote", () => {
             open: () => {},
             close: () => {}
         };
-        sunshadeRemote = new SunshadeRemote(eventEmitter, buttons);
+        remote = sunshadeRemote(eventEmitter, buttons);
     });
 
-    it("Should press the open button when open invoked", (done) => {
+    it("should press the open button when open invoked", (done) => {
         buttons.open = () => { done(); };
         buttons.close = () => { done(new Error("close invoked instead.")); };
 
-        sunshadeRemote.open();
+        remote.open();
     });
 
-    it("Should press the close button when close invoked", (done) => {
+    it("should press the close button when close invoked", (done) => {
         buttons.close = () => { done(); };
         buttons.open = () => { done(new Error("open invoked instead.")); };
 
-        sunshadeRemote.close();
+        remote.close();
     });
 
-    it("Should press the open button on control:open when auto mode on.", (done) => {
-        sunshadeRemote.automatic(true);
+    it("should press the open button on control:open when auto mode on.", (done) => {
+        remote.automatic(true);
         buttons.open = () => { done(); };
         buttons.close = () => { done(new Error("close invoked instead.")); };
 
         eventEmitter.emit("control:open");
     });
 
-    it("Should press the close button on control:close when auto mode on.", (done) => {
-        sunshadeRemote.automatic(true);
+    it("should press the close button on control:close when auto mode on.", (done) => {
+        remote.automatic(true);
         buttons.close = () => { done(); };
         buttons.open = () => { done(new Error("open invoked instead.")); };
 
         eventEmitter.emit("control:close");
     });
 
-    it("Should not press the open button on control:open when auto mode off.", (done) => {
-        sunshadeRemote.automatic(false);
+    it("should not press the open button on control:open when auto mode off.", (done) => {
+        remote.automatic(false);
         buttons.open = () => { done(new Error("open invoked.")); };
         buttons.close = () => { done(new Error("close invoked.")); };
 
@@ -54,8 +54,8 @@ describe("SunshadeRemote", () => {
         done();
     });
 
-    it("Should not press the close button on control:close when auto mode off.", (done) => {
-        sunshadeRemote.automatic(false);
+    it("should not press the close button on control:close when auto mode off.", (done) => {
+        remote.automatic(false);
         buttons.open = () => { done(new Error("open invoked.")); };
         buttons.close = () => { done(new Error("close invoked.")); };
 

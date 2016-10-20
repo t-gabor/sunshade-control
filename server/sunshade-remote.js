@@ -1,31 +1,28 @@
-class SunshadeRemote {
-    constructor(emitter, buttons) {
-        this.buttons = buttons;
-        this.auto = false;
+function sunshadeRemote(emitter, buttons) {
+    let auto = false;
 
-        emitter.on("control:open", () => {
-            if (this.auto) {
-                this.buttons.open();
-            }
-        });
-        emitter.on("control:close", () => {
-            if (this.auto) {
-                this.buttons.close();
-            }
-        });
-    }
+    emitter.on("control:open", () => {
+        if (auto) {
+            buttons.open();
+        }
+    });
+    emitter.on("control:close", () => {
+        if (auto) {
+            buttons.close();
+        }
+    });
 
-    open(cb) {
-        this.buttons.open(cb);
-    }
-
-    close(cb) {
-        this.buttons.close(cb);
-    }
-
-    automatic(auto) {
-        this.auto = auto;
-    }
+    return {
+        open: (cb) => {
+            buttons.open(cb);
+        },
+        close: (cb) => {
+            buttons.close(cb);
+        },
+        automatic: (a) => {
+            auto = a;
+        }
+    };
 }
 
-module.exports = SunshadeRemote;
+module.exports = sunshadeRemote;
