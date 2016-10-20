@@ -1,0 +1,42 @@
+const schedule = require("node-schedule");
+
+// Dummy interval timer to keep this thread awake
+// See https://github.com/nodejs/node/issues/4262 
+setInterval(() => {}, 60000);
+
+const defaultOptions = {
+    fromHour: 9,
+    toHour: 18,
+    inteval: 15
+};
+
+function scheduler(eventEmitter, options = defaultOptions, logger) {
+    const udpateRule = new schedule.RecurrenceRule();
+    udpateRule.hour = new schedule.Range(options.fromHour, options.toHour - 1);
+    udpateRule.minute = new schedule.Range(0, 59, options.inteval || 15);
+    const updateJob = schedule.scheduleJob(udpateRule, () => {
+        if (logger) {
+            logger.info("End of Day, closing.");
+        }
+        eventEmitter.emit("control:update");
+    });
+
+    const endOfDayRule = new schedule.RecurrenceRule();
+    endOfDayRule.hour = options.toHour;
+    endOfDayRule.minute = 0;
+    const endOfDayJob = schedule.scheduleJob(endOfDayRule, () => {
+        if (logger) {
+            logger.info("End of Day, closing.");
+        }
+        eventEmitter.emit("control:close");
+    });
+
+    return {
+        cancel: () => {
+            updateJob.cancel();
+            endOfDayJob.cancel();
+        }
+    };
+}
+
+module.exports = scheduler;
