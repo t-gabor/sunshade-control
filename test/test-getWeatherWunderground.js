@@ -15,6 +15,11 @@ function mockConstructor() {
 }
 
 mock("wundergroundnode", mockConstructor);
+mock("../config/wunderground.json", {
+    key: "x",
+    location: "x"
+});
+
 const getWeatherWunderground = require("../server/getWeatherWunderground");
 
 describe("getWeatherWunderground", () => {
