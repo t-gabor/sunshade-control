@@ -16,7 +16,7 @@ function scheduler(eventEmitter, options = defaultOptions, logger) {
     udpateRule.minute = new schedule.Range(0, 59, options.inteval || 15);
     const updateJob = schedule.scheduleJob(udpateRule, () => {
         if (logger) {
-            logger.info("End of Day, closing.");
+            logger.info("Update.");
         }
         eventEmitter.emit("control:update");
     });
