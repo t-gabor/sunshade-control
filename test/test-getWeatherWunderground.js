@@ -20,7 +20,7 @@ mock("../config/wunderground.json", {
     location: "x"
 });
 
-const getWeatherWunderground = require("../server/getWeatherWunderground");
+const getWeatherWunderground = require("../server/getWeatherWunderground")();
 
 describe("getWeatherWunderground", () => {
     it("returns weather data", (done) => {

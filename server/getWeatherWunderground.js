@@ -15,12 +15,17 @@ function extractWeatherData(data) {
     };
 }
 
-module.exports = (cb) => {
+module.exports = logger => (cb) => {
     wunderground.conditions().hourlyForecast().request(settings.location, (error, response) => {
         if (error) {
             cb(error);
         } else {
-            cb(null, extractWeatherData(response));
+            const data = extractWeatherData(response);
+            if (logger) {
+                logger.info(data);
+            }
+
+            cb(null, data);
         }
     });
 };
