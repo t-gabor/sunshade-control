@@ -1,5 +1,16 @@
-const bunyan = require("bunyan");
-const Server = require("./server");
+const logger = require("bunyan").createLogger({ name: "sunshade-control" });
 
-const logger = bunyan.createLogger({ name: "sunshade-control" });
-const server = new Server(logger);
+const server = require("./server")(logger);
+
+const getWeather = require("./getWeatherWunderground")(logger);
+const ruleEngine = require("./ruleEngine")(server.app, getWeather);
+
+const buttons = {
+    open: () => { logger.info("Open."); },
+    close: () => { logger.info("Close."); }
+};
+
+const sunshadeRemote = require("./sunshade-remote")(server.app, buttons);
+sunshadeRemote.automatic(true);
+
+const scheduler = require("./scheduler")(server.app, undefined, logger);

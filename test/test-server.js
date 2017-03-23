@@ -1,11 +1,10 @@
-const Server = require("../server/server");
 const request = require("supertest");
+const server = require("../server/server")({
+    info: () => { },
+    error: () => { },
+});
 
 describe("#/api/control", () => {
-    const server = new Server({
-        info: () => { },
-        error: () => { },
-    });
 
     after(() => {
         server.server.close();
@@ -26,7 +25,7 @@ describe("#/api/control", () => {
     });
 
     function postState(state) {
-        return request(server.app)        
+        return request(server.app)
             .post("/api/control")
             .set("Content-Type", "application/json")
             .send(`{"state": "${state}"}`);
