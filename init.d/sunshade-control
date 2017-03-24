@@ -1,0 +1,31 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          sunshade-control
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Sunshade control.
+# Description:       A node.js server controlling sunshade through GPIO pins.
+### END INIT INFO
+
+RUN_AS=pi
+APPJS="/home/$RUN_AS/sunshade-control/server/app.js"
+PORT=1080
+
+export PATH=$PATH:/usr/local/bin
+export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+
+case "$1" in
+  start)
+    sudo -u $RUN_AS PORT=$PORT forever start -p /home/$RUN_AS/.forever $APPJS
+    ;;
+  stop)
+    exec sudo -u $RUN_AS forever stop $APPJS
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
