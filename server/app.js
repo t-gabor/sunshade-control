@@ -1,4 +1,8 @@
-const logger = require("bunyan").createLogger({ name: "sunshade-control" });
+const loggerStreams = require("../config/logger.json");
+const logger = require("bunyan").createLogger({
+    name: "sunshade-control",
+    streams: loggerStreams
+});
 
 const server = require("./server")(logger);
 
