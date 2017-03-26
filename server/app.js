@@ -1,18 +1,21 @@
 const loggerStreams = require("../config/logger.json");
 const logger = require("bunyan").createLogger({
     name: "sunshade-control",
-    streams: loggerStreams
+    streams: [...loggerStreams, {
+        level: "info",
+        stream: process.stdout            // log INFO and above to stdout
+    }]
 });
 
 const server = require("./server")(logger);
 
 const getWeather = require("./getWeatherWunderground")(logger);
-const ruleEngine = require("./ruleEngine")(server.app, getWeather);
+const ruleEngine = require("./rule-engine")(server.app, getWeather);
 
-const buttons = {
+const buttons = (process.arch !== "arm") ? {
     open: () => { logger.info("Open."); },
     close: () => { logger.info("Close."); }
-};
+} : require("./gpio-buttons")(logger);
 
 const sunshadeRemote = require("./sunshade-remote")(server.app, buttons);
 sunshadeRemote.automatic(true);

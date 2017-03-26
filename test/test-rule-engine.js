@@ -1,4 +1,4 @@
-const ruleEngine = require("../server/ruleEngine");
+const ruleEngine = require("../server/rule-engine");
 const events = require("events");
 const assert = require("assert");
 
