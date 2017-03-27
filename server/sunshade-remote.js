@@ -11,6 +11,18 @@ function sunshadeRemote(emitter, buttons) {
             buttons.close();
         }
     });
+    emitter.on("control:auto:on", () => {
+        auto = true;
+    });
+    emitter.on("control:auto:off", () => {
+        auto = false;
+    });
+    emitter.on("control:manual:open", () => {
+        buttons.open();
+    });
+    emitter.on("control:manual:close", () => {
+        buttons.close();
+    });
 
     return {
         open: (cb) => {
@@ -18,9 +30,6 @@ function sunshadeRemote(emitter, buttons) {
         },
         close: (cb) => {
             buttons.close(cb);
-        },
-        automatic: (a) => {
-            auto = a;
         }
     };
 }

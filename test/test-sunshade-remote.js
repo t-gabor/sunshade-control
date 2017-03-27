@@ -30,7 +30,7 @@ describe("sunshadeRemote", () => {
     });
 
     it("should press the open button on control:open when auto mode on.", (done) => {
-        remote.automatic(true);
+        eventEmitter.emit("control:auto:on");
         buttons.open = () => { done(); };
         buttons.close = () => { done(new Error("close invoked instead.")); };
 
@@ -38,7 +38,7 @@ describe("sunshadeRemote", () => {
     });
 
     it("should press the close button on control:close when auto mode on.", (done) => {
-        remote.automatic(true);
+        eventEmitter.emit("control:auto:on");
         buttons.close = () => { done(); };
         buttons.open = () => { done(new Error("open invoked instead.")); };
 
@@ -46,7 +46,7 @@ describe("sunshadeRemote", () => {
     });
 
     it("should not press the open button on control:open when auto mode off.", (done) => {
-        remote.automatic(false);
+        eventEmitter.emit("control:auto:off");
         buttons.open = () => { done(new Error("open invoked.")); };
         buttons.close = () => { done(new Error("close invoked.")); };
 
@@ -55,11 +55,27 @@ describe("sunshadeRemote", () => {
     });
 
     it("should not press the close button on control:close when auto mode off.", (done) => {
-        remote.automatic(false);
+        eventEmitter.emit("control:auto:off");
         buttons.open = () => { done(new Error("open invoked.")); };
         buttons.close = () => { done(new Error("close invoked.")); };
 
         eventEmitter.emit("control:close");
         done();
+    });
+
+    it("should press the open button on control:manual:open when auto mode off.", (done) => {
+        eventEmitter.emit("control:auto:off");
+        buttons.open = () => { done(); };
+        buttons.close = () => { done(new Error("close invoked instead.")); };
+
+        eventEmitter.emit("control:manual:open");
+    });
+
+    it("should press the close button on control:manual:close when auto mode off.", (done) => {
+        eventEmitter.emit("control:auto:off");
+        buttons.close = () => { done(); };
+        buttons.open = () => { done(new Error("open invoked instead.")); };
+
+        eventEmitter.emit("control:manual:close");
     });
 });

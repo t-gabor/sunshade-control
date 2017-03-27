@@ -18,6 +18,6 @@ const buttons = (process.arch !== "arm") ? {
 } : require("./gpio-buttons")(logger);
 
 const sunshadeRemote = require("./sunshade-remote")(server.app, buttons);
-sunshadeRemote.automatic(true);
+server.app.emit("control:auto:on");
 
 const scheduler = require("./scheduler")(server.app, undefined, logger);
