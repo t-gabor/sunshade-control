@@ -3,14 +3,14 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const routes = require("./routes");
 
-function server(logger) {
+function server(emitter, state, logger) {
     const port = process.env.PORT || 3001;
     const app = express();
 
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    routes(app);
+    routes(app, emitter, state);
 
     app.use((err, req, res, next) => {
         if (!err) {

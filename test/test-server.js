@@ -1,8 +1,18 @@
 const request = require("supertest");
-const server = require("../server/server")({
+const EventEmitter = require('events');
+
+const emitter = new EventEmitter();
+
+const state = {
+    auto: true
+};
+
+const logger = {
     info: () => { },
-    error: () => { },
-});
+    error: () => { }
+};
+
+const server = require("../server/server")(emitter, state, logger);
 
 describe("#/api/control", () => {
 
@@ -24,11 +34,11 @@ describe("#/api/control", () => {
             .expect(400, done);
     });
 
-    function postState(state) {
+    function postState(value) {
         return request(server.app)
             .post("/api/control")
             .set("Content-Type", "application/json")
-            .send(`{"state": "${state}"}`);
+            .send(`{"state": "${value}"}`);
     }
 
     it("should respond 200 to open request", (done) => {
@@ -42,14 +52,14 @@ describe("#/api/control", () => {
     });
 
     it("should raise control:manual:open event", (done) => {
-        server.app.once("control:manual:open", () => {
+        emitter.once("control:manual:open", () => {
             done();
         });
         postState("open").end();
     });
 
     it("should raise control:manual:close event", (done) => {
-        server.app.once("control:manual:close", () => {
+        emitter.once("control:manual:close", () => {
             done();
         });
         postState("close").end();
@@ -60,12 +70,6 @@ describe("#/api/auto", () => {
 
     after(() => {
         server.server.close();
-    });
-
-    it("should respond 404 to GET", (done) => {
-        request(server.app)
-            .get("/api/auto")
-            .expect(404, done);
     });
 
     it("should respond 400 to marlformed request", (done) => {
@@ -94,16 +98,30 @@ describe("#/api/auto", () => {
     });
 
     it("should raise control:auto:on event", (done) => {
-        server.app.once("control:auto:on", () => {
+        emitter.once("control:auto:on", () => {
             done();
         });
         postState("on").end();
     });
 
     it("should raise control:auto:off event", (done) => {
-        server.app.once("control:auto:off", () => {
+        emitter.once("control:auto:off", () => {
             done();
         });
         postState("off").end();
+    });
+
+    it("should respond on to GET if auto mode on.", (done) => {
+        state.auto = true;
+        request(server.app)
+            .get("/api/auto")
+            .expect({ state: "on" }, done);
+    });
+
+    it("should respond off to GET if auto mode off.", (done) => {
+        state.auto = false;
+        request(server.app)
+            .get("/api/auto")
+            .expect({ state: "off" }, done);
     });
 });

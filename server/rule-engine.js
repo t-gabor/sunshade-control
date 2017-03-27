@@ -52,16 +52,18 @@ const defaultRules = [
     weatherCodeRule
 ];
 
-function ruleEngine(emitter, getWeather) {
+function ruleEngine(emitter, getWeather, state) {
 
-    let rules = defaultRules;
+    if (!state.rules) {
+        state.rules = defaultRules;
+    }
 
     function processWeather(error, weather) {
         if (error) {
             return;
         }
 
-        new NodeRules(rules).execute(weather, (result) => {
+        new NodeRules(state.rules).execute(weather, (result) => {
             if (result && result.event) {
                 emitter.emit(result.event);
             }
@@ -71,12 +73,6 @@ function ruleEngine(emitter, getWeather) {
     emitter.on("control:update", () => {
         getWeather(processWeather);
     });
-
-    return {
-        replaceRules: (r) => {
-            rules = r;
-        }
-    };
 }
 
 module.exports = ruleEngine;

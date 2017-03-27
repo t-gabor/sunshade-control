@@ -1,3 +1,5 @@
+const EventEmitter = require('events');
+
 const loggerStreams = require("../config/logger.json");
 const logger = require("bunyan").createLogger({
     name: "sunshade-control",
@@ -7,17 +9,20 @@ const logger = require("bunyan").createLogger({
     }]
 });
 
-const server = require("./server")(logger);
-
-const getWeather = require("./getWeatherWunderground")(logger);
-const ruleEngine = require("./rule-engine")(server.app, getWeather);
-
 const buttons = (process.arch !== "arm") ? {
     open: () => { logger.info("Open."); },
     close: () => { logger.info("Close."); }
 } : require("./gpio-buttons")(logger);
 
-const sunshadeRemote = require("./sunshade-remote")(server.app, buttons);
-server.app.emit("control:auto:on");
+const state = {
+    auto: true,
+    rules: undefined
+};
 
-const scheduler = require("./scheduler")(server.app, undefined, logger);
+const emitter = new EventEmitter();
+
+const getWeather = require("./getWeatherWunderground")(logger);
+require("./rule-engine")(emitter, getWeather, state);
+require("./sunshade-remote")(emitter, buttons, state);
+require("./scheduler")(emitter, state, logger);
+require("./server")(emitter, state, logger);

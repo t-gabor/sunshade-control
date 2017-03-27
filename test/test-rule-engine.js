@@ -10,6 +10,11 @@ describe("ruleEngine", () => {
         cb(null, weather);
     };
 
+    const state = {
+        auto: true,
+        rules: undefined
+    };
+
     beforeEach(() => {
         eventEmitter = new events.EventEmitter();
         weather = {
@@ -19,7 +24,7 @@ describe("ruleEngine", () => {
             weatherCode: "clear",
             precipIntensity: 0
         };
-        ruleEngine(eventEmitter, getWeather);
+        ruleEngine(eventEmitter, getWeather, state);
     });
 
     it("emits close event if windSpeed is 26", (done) => {

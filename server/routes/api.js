@@ -1,40 +1,48 @@
 const Router = require("express").Router;
 
-const router = Router();
-module.exports = router;
-
 function badRequest(next) {
     const error = new Error("Bad Request");
     error.status = 400;
     next(error);
 }
 
-router.post("/control", (req, res, next) => {
+module.exports = (emitter, state) => {
+    const router = Router();
 
-    if (!req.body.state) {
-        badRequest(next);
-    } else if (req.body.state === "open") {
-        req.app.emit("control:manual:open");
-        res.sendStatus(200);
-    } else if (req.body.state === "close") {
-        req.app.emit("control:manual:close");
-        res.sendStatus(200);
-    } else {
-        badRequest(next);
-    }
-});
+    router.post("/control", (req, res, next) => {
 
-router.post("/auto", (req, res, next) => {
+        if (!req.body.state) {
+            badRequest(next);
+        } else if (req.body.state === "open") {
+            emitter.emit("control:manual:open");
+            res.sendStatus(200);
+        } else if (req.body.state === "close") {
+            emitter.emit("control:manual:close");
+            res.sendStatus(200);
+        } else {
+            badRequest(next);
+        }
+    });
 
-    if (!req.body.state) {
-        badRequest(next);
-    } else if (req.body.state === "on") {
-        req.app.emit("control:auto:on");
-        res.sendStatus(200);
-    } else if (req.body.state === "off") {
-        req.app.emit("control:auto:off");
-        res.sendStatus(200);
-    } else {
-        badRequest(next);
-    }
-});
+    router.get("/auto", (req, res) => {
+        res.send({ state: state.auto ? "on" : "off" });
+    });
+
+    router.post("/auto", (req, res, next) => {
+
+        if (!req.body.state) {
+            badRequest(next);
+        } else if (req.body.state === "on") {
+            emitter.emit("control:auto:on");
+            res.sendStatus(200);
+        } else if (req.body.state === "off") {
+            emitter.emit("control:auto:off");
+            res.sendStatus(200);
+        } else {
+            badRequest(next);
+        }
+    });
+
+    return router;
+};
+

@@ -6,13 +6,17 @@ describe("sunshadeRemote", () => {
     let remote;
     let buttons;
 
+    const state = {
+        auto: true
+    };
+
     beforeEach(() => {
         eventEmitter = new events.EventEmitter();
         buttons = {
             open: () => {},
             close: () => {}
         };
-        remote = sunshadeRemote(eventEmitter, buttons);
+        remote = sunshadeRemote(eventEmitter, buttons, state);
     });
 
     it("should press the open button when open invoked", (done) => {
