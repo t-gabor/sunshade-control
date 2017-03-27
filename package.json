@@ -7,8 +7,11 @@
   "description": "An automatic weather aware sunshade control web app to be run on RPi, with Node.js. A remote supporting open/close commands should be hooked up on the GPIO.",
   "main": "server/app.js",
   "scripts": {
-    "start": "node server/app.js",
-    "test": "node_modules/.bin/mocha"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/app.js",
+    "client": "node start-client.js",
+    "test": "mocha",
+    "production": "cross-env NODE_ENV=production npm run server"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,8 @@
     "wundergroundnode": "0.9.0"
   },
   "devDependencies": {
+    "concurrently": "3.4.0",
+    "cross-env": "3.2.4",
     "eslint": "3.8.0",
     "eslint-config-airbnb": "12.0.0",
     "eslint-config-standard": "6.2.0",

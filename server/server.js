@@ -4,7 +4,7 @@ const methodOverride = require("method-override");
 const routes = require("./routes");
 
 function server(logger) {
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 3001;
     const app = express();
 
     app.use(bodyParser.json());
@@ -21,6 +21,10 @@ function server(logger) {
         res.status(err.status || 500);
         res.send(err.message);
     });
+
+    if (process.env.NODE_ENV === "production") {
+        app.use(express.static("client/build"));
+    }
 
     return {
         app,
