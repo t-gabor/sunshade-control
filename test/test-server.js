@@ -41,17 +41,69 @@ describe("#/api/control", () => {
             .expect(200, done);
     });
 
-    it("should raise control:open event", (done) => {
-        server.app.once("control:open", () => {
+    it("should raise control:manual:open event", (done) => {
+        server.app.once("control:manual:open", () => {
             done();
         });
         postState("open").end();
     });
 
-    it("should raise control:close event", (done) => {
-        server.app.once("control:close", () => {
+    it("should raise control:manual:close event", (done) => {
+        server.app.once("control:manual:close", () => {
             done();
         });
         postState("close").end();
+    });
+});
+
+describe("#/api/auto", () => {
+
+    after(() => {
+        server.server.close();
+    });
+
+    it("should respond 404 to GET", (done) => {
+        request(server.app)
+            .get("/api/auto")
+            .expect(404, done);
+    });
+
+    it("should respond 400 to marlformed request", (done) => {
+        request(server.app)
+            .post("/api/auto")
+            .set("Content-Type", "application/json")
+            .send("a=1")
+            .expect(400, done);
+    });
+
+    function postState(state) {
+        return request(server.app)
+            .post("/api/auto")
+            .set("Content-Type", "application/json")
+            .send(`{"state": "${state}"}`);
+    }
+
+    it("should respond 200 to on request", (done) => {
+        postState("on")
+            .expect(200, done);
+    });
+
+    it("should respond 200 to off request", (done) => {
+        postState("off")
+            .expect(200, done);
+    });
+
+    it("should raise control:auto:on event", (done) => {
+        server.app.once("control:auto:on", () => {
+            done();
+        });
+        postState("on").end();
+    });
+
+    it("should raise control:auto:off event", (done) => {
+        server.app.once("control:auto:off", () => {
+            done();
+        });
+        postState("off").end();
     });
 });
