@@ -1,4 +1,4 @@
-function sunshadeRemote(emitter, buttons, state) {
+function sunshadeRemote(emitter, buttons, state, logger) {
     emitter.on("control:open", () => {
         if (state.auto) {
             buttons.open();
@@ -11,9 +11,15 @@ function sunshadeRemote(emitter, buttons, state) {
     });
     emitter.on("control:auto:on", () => {
         state.auto = true;
+        if (logger) {
+            logger.info("Auto mode: on")
+        }
     });
     emitter.on("control:auto:off", () => {
         state.auto = false;
+        if (logger) {
+            logger.info("Auto mode: off")
+        }
     });
     emitter.on("control:manual:open", () => {
         buttons.open();

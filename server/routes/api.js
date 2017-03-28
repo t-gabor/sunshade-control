@@ -1,18 +1,22 @@
 const Router = require("express").Router;
 
-function badRequest(next) {
-    const error = new Error("Bad Request");
-    error.status = 400;
-    next(error);
-}
+module.exports = (emitter, state, logger) => {
 
-module.exports = (emitter, state) => {
+    function badRequest(body, next) {
+        if (logger) {
+            logger.error(body);
+        }
+        const error = new Error("Bad Request");
+        error.status = 400;
+        next(error);
+    }
+
     const router = Router();
 
     router.post("/control", (req, res, next) => {
 
         if (!req.body.state) {
-            badRequest(next);
+            badRequest(req.body, next);
         } else if (req.body.state === "open") {
             emitter.emit("control:manual:open");
             res.sendStatus(200);
@@ -20,7 +24,7 @@ module.exports = (emitter, state) => {
             emitter.emit("control:manual:close");
             res.sendStatus(200);
         } else {
-            badRequest(next);
+            badRequest(req.body, next);
         }
     });
 
@@ -31,7 +35,10 @@ module.exports = (emitter, state) => {
     router.post("/auto", (req, res, next) => {
 
         if (!req.body.state) {
-            badRequest(next);
+            if (logger) {
+                logger.error(req.body);
+            }
+            badRequest(req.body, next);
         } else if (req.body.state === "on") {
             emitter.emit("control:auto:on");
             res.sendStatus(200);
@@ -39,7 +46,7 @@ module.exports = (emitter, state) => {
             emitter.emit("control:auto:off");
             res.sendStatus(200);
         } else {
-            badRequest(next);
+            badRequest(req.body, next);
         }
     });
 

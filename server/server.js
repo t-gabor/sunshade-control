@@ -10,7 +10,7 @@ function server(emitter, state, logger) {
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    routes(app, emitter, state);
+    routes(app, emitter, state, logger);
 
     app.use((err, req, res, next) => {
         if (!err) {
