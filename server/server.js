@@ -1,16 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const routes = require("./routes");
+const api = require("./api");
 
 function server(emitter, state, logger) {
-    const port = process.env.PORT || 3001;
     const app = express();
 
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    routes(app, emitter, state, logger);
+    app.use("/api", api(emitter, state, logger));
+
+    if (process.env.NODE_ENV === "production") {
+        app.use(express.static("client/build"));
+    }
 
     app.use((err, req, res, next) => {
         if (!err) {
@@ -22,10 +25,7 @@ function server(emitter, state, logger) {
         res.send(err.message);
     });
 
-    if (process.env.NODE_ENV === "production") {
-        app.use(express.static("client/build"));
-    }
-
+    const port = process.env.PORT || 3001;
     return {
         app,
         server: app.listen(port, () => {

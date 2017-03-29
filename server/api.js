@@ -50,6 +50,10 @@ module.exports = (emitter, state, logger) => {
         }
     });
 
+    router.get("/weather", (req, res) => {
+        res.send(state.weather);
+    });
+
     return router;
 };
 

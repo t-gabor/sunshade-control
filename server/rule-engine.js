@@ -62,7 +62,7 @@ function ruleEngine(emitter, getWeather, state) {
         if (error) {
             return;
         }
-
+        state.weather = weather;
         new NodeRules(state.rules).execute(weather, (result) => {
             if (result && result.event) {
                 emitter.emit(result.event);

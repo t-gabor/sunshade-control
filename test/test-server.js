@@ -15,7 +15,6 @@ const logger = {
 const server = require("../server/server")(emitter, state, logger);
 
 describe("#/api/control", () => {
-
     after(() => {
         server.server.close();
     });
@@ -67,7 +66,6 @@ describe("#/api/control", () => {
 });
 
 describe("#/api/auto", () => {
-
     after(() => {
         server.server.close();
     });
@@ -80,11 +78,11 @@ describe("#/api/auto", () => {
             .expect(400, done);
     });
 
-    function postState(state) {
+    function postState(value) {
         return request(server.app)
             .post("/api/auto")
             .set("Content-Type", "application/json")
-            .send(`{"state": "${state}"}`);
+            .send(`{"state": "${value}"}`);
     }
 
     it("should respond 200 to on request", (done) => {
@@ -123,5 +121,30 @@ describe("#/api/auto", () => {
         request(server.app)
             .get("/api/auto")
             .expect({ state: "off" }, done);
+    });
+});
+
+describe("#/api/weather", () => {
+    after(() => {
+        server.server.close();
+    });
+
+    it("should respond with the weather object to get", (done) => {
+        state.weather = {
+            code: "clear",
+            temp: 15
+        };
+
+        request(server.app)
+            .get("/api/weather")
+            .expect(state.weather, done);
+    });
+
+    it("should respond with empty string if the weather object is undefined", (done) => {
+        state.weather = undefined;
+
+        request(server.app)
+            .get("/api/weather")
+            .expect("", done);
     });
 });
