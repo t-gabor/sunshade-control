@@ -140,11 +140,11 @@ describe("#/api/weather", () => {
             .expect(state.weather, done);
     });
 
-    it("should respond with empty string if the weather object is undefined", (done) => {
+    it("should respond with empty object if the weather object is undefined", (done) => {
         state.weather = undefined;
 
         request(server.app)
             .get("/api/weather")
-            .expect("", done);
+            .expect({}, done);
     });
 });

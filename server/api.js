@@ -51,7 +51,11 @@ module.exports = (emitter, state, logger) => {
     });
 
     router.get("/weather", (req, res) => {
-        res.send(state.weather);
+        let response = state.weather;
+        if (!response) {
+            response = {};
+        }
+        res.send(response);
     });
 
     return router;
