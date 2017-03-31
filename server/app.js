@@ -24,5 +24,5 @@ const emitter = new EventEmitter();
 const getWeather = require("./getWeatherWunderground")(logger);
 require("./rule-engine")(emitter, getWeather, state);
 require("./sunshade-remote")(emitter, buttons, state, logger);
-require("./scheduler")(emitter, state, logger);
+require("./scheduler")(emitter, undefined, logger);
 require("./server")(emitter, state, logger);

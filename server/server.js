@@ -14,7 +14,7 @@ function server(emitter, state, logger) {
     app.use(methodOverride());
 
     if (process.env.NODE_ENV === "production") {
-        app.use(express.static("client/build"));
+        app.use(express.static(__dirname + "/../client/build"));
     }
 
     const authenticate = jwt({
