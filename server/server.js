@@ -12,7 +12,7 @@ function server(emitter, state, logger) {
     app.use("/api", api(emitter, state, logger));
 
     if (process.env.NODE_ENV === "production") {
-        app.use(express.static("client/build"));
+        app.use(express.static(__dirname + "/../client/build"));
     }
 
     app.use((err, req, res, next) => {
