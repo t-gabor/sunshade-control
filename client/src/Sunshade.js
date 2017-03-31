@@ -40,6 +40,7 @@ class Sunshade extends Component {
 
     getAuto() {
         this.props.auth.fetch("/api/auto")
+            .then(res => res.json())
             .then(json => {
                 this.setState({ auto: json.state === "on" });
             })
@@ -50,6 +51,7 @@ class Sunshade extends Component {
 
     getWeather() {
         this.props.auth.fetch("/api/weather")
+            .then(res => res.json())
             .then(json => {
                 this.setState({ weather: json });
             })

@@ -63,6 +63,5 @@ export default class AuthService {
             ...options
         })
             .then(this._checkStatus) // to raise errors for wrong status
-            .then(response => response.json()) // to parse the response as json
     }
 }
