@@ -18,7 +18,7 @@ export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
 
 case "$1" in
   start)
-    sudo -u $RUN_AS PORT=$PORT forever start -p /home/$RUN_AS/.forever $APPJS
+    sudo -u $RUN_AS PORT=$PORT NODE_ENV="production" forever start -p /home/$RUN_AS/.forever $APPJS
     ;;
   stop)
     exec sudo -u $RUN_AS forever stop $APPJS
