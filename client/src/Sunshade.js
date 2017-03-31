@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import Toggle from 'material-ui/Toggle';
 import Snackbar from 'material-ui/Snackbar';
+import Buttons from './Buttons';
+import Weather from './Weather';
 
 class Sunshade extends Component {
 
@@ -9,6 +9,7 @@ class Sunshade extends Component {
         super();
         this.state = {
             auto: true,
+            weather: undefined,
             error: undefined
         };
 
@@ -16,14 +17,17 @@ class Sunshade extends Component {
         this.postState = this.postState.bind(this);
     }
 
+    componentDidMount() {
+        this.getAuto();
+        this.getWeather();
+    }
+
     render() {
         return (
-            <div style={{ width: 250 }}>
-                <div style={{ margin: 12 }}>
-                    <Toggle label="Auto" toggled={this.state.auto} onToggle={(event, checked) => this.postAuto(checked)} />
-                </div>
-                <RaisedButton disabled={this.state.auto} label="Open" primary={true} style={{ margin: 12 }} onTouchTap={(event) => this.postState("open")} />
-                <RaisedButton disabled={this.state.auto} label="Close" secondary={true} style={{ margin: 12, float: "right" }} onTouchTap={(event) => this.postState("close")}/>
+            <div style={{ margin: 12 }}>
+                <Weather weather={this.state.weather} />
+                <div style={{height: 12}}/>
+                <Buttons auto={this.state.auto} postAuto={this.postAuto} postState={this.postState} />
                 <Snackbar
                     open={this.state.error}
                     message={this.state.error}
@@ -32,6 +36,28 @@ class Sunshade extends Component {
                 />
             </div>
         );
+    }
+
+    getAuto() {
+        fetch("/api/auto")
+            .then(res => res.json())
+            .then(json => {
+                this.setState({ auto: json.state === "on" });
+            })
+            .catch((e) => {
+                this.setState({ error: e.message })
+            });
+    }
+
+    getWeather() {
+        fetch("/api/weather")
+            .then(res => res.json())
+            .then(json => {
+                this.setState({ weather: json });
+            })
+            .catch((e) => {
+                this.setState({ error: e.message })
+            });
     }
 
     postAuto(auto) {

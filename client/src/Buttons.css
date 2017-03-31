@@ -1,0 +1,13 @@
+.button-group {
+    width: 50%;
+    display: inline-block;
+}
+
+.open {
+    float: right;
+}
+
+.close {
+    float: right;
+    margin-right: 12px;
+}
