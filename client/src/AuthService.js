@@ -46,4 +46,23 @@ export default class AuthService {
         localStorage.removeItem('id_token');
         this.reload();
     }
+
+    fetch(url, options) {
+        // performs api calls sending the required authentication headers
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        // if logged in, includes the authorization header
+        if (this.loggedIn()) {
+            headers['Authorization'] = 'Bearer ' + this.getToken()
+        }
+
+        return fetch(url, {
+            headers,
+            ...options
+        })
+            .then(this._checkStatus) // to raise errors for wrong status
+            .then(response => response.json()) // to parse the response as json
+    }
 }

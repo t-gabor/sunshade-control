@@ -1,19 +1,29 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
+const jwt = require("express-jwt");
 const api = require("./api");
+const auth0 = require("../config/auth0.server.json");
 
 function server(emitter, state, logger) {
     const app = express();
 
+    app.use(cors());
     app.use(bodyParser.json());
     app.use(methodOverride());
-
-    app.use("/api", api(emitter, state, logger));
 
     if (process.env.NODE_ENV === "production") {
         app.use(express.static("client/build"));
     }
+
+    const authenticate = jwt({
+        secret: auth0.clientSecret,
+        audience: auth0.clientId
+    });
+
+    app.use("/api", authenticate);
+    app.use("/api", api(emitter, state, logger));
 
     app.use((err, req, res, next) => {
         if (!err) {

@@ -28,7 +28,7 @@ class App extends Component {
             iconElementRight={this.auth.loggedIn() ?
               <AppBarButton label="Logout" onTouchTap={() => this.auth.logout()} /> :
               <AppBarButton label="Login" onTouchTap={() => this.auth.login()} />} />
-          {this.auth.loggedIn() ? <Sunshade /> : <div className="login-please">Please log in.</div>}
+          {this.auth.loggedIn() ? <Sunshade auth={this.auth} /> : <div className="login-please">Please log in.</div>}
         </div>
       </MuiThemeProvider>
     );

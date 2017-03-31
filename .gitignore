@@ -3,4 +3,5 @@ node_modules
 .vscode
 config/wunderground.json
 config/auth0.json
+config/auth0.server.json
 info.log

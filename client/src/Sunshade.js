@@ -26,7 +26,7 @@ class Sunshade extends Component {
         return (
             <div style={{ margin: 12 }}>
                 <Weather weather={this.state.weather} />
-                <div style={{height: 12}}/>
+                <div style={{ height: 12 }} />
                 <Buttons auto={this.state.auto} postAuto={this.postAuto} postState={this.postState} />
                 <Snackbar
                     open={this.state.error}
@@ -39,8 +39,7 @@ class Sunshade extends Component {
     }
 
     getAuto() {
-        fetch("/api/auto")
-            .then(res => res.json())
+        this.props.auth.fetch("/api/auto")
             .then(json => {
                 this.setState({ auto: json.state === "on" });
             })
@@ -50,8 +49,7 @@ class Sunshade extends Component {
     }
 
     getWeather() {
-        fetch("/api/weather")
-            .then(res => res.json())
+        this.props.auth.fetch("/api/weather")
             .then(json => {
                 this.setState({ weather: json });
             })
@@ -61,11 +59,7 @@ class Sunshade extends Component {
     }
 
     postAuto(auto) {
-        fetch("/api/auto", {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+        this.props.auth.fetch("/api/auto", {
             method: 'POST',
             body: JSON.stringify({ state: auto ? "on" : "off" })
         })
@@ -76,11 +70,7 @@ class Sunshade extends Component {
     }
 
     postState(state) {
-        fetch("/api/control", {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+        this.props.auth.fetch("/api/control", {
             method: 'POST',
             body: JSON.stringify({ state })
         })
