@@ -1,4 +1,24 @@
 import Auth0Lock from 'auth0-lock'
+import decode from 'jwt-decode';
+
+function getTokenExpirationDate(token){
+  const decoded = decode(token)
+  if(!decoded.exp) {
+    return null
+  }
+
+  const date = new Date(0) // The 0 here is the key, which sets the date to the epoch
+  date.setUTCSeconds(decoded.exp)
+  return date
+}
+
+function isTokenExpired(token){
+  const date = getTokenExpirationDate(token)
+  if (date === null) {
+    return false
+  }
+  return !(date.valueOf() > new Date().valueOf())
+}
 
 export default class AuthService {
     constructor(clientId, domain, reload) {
@@ -28,7 +48,8 @@ export default class AuthService {
 
     loggedIn() {
         // Checks if there is a saved token and it's still valid
-        return !!this.getToken()
+        const token = this.getToken();
+        return !!token && !isTokenExpired(token);
     }
 
     setToken(idToken) {
