@@ -11,12 +11,14 @@ function sunshadeRemote(emitter, buttons, state, logger) {
     });
     emitter.on("control:auto:on", () => {
         state.auto = true;
+        state.save();
         if (logger) {
             logger.info("Auto mode: on")
         }
     });
     emitter.on("control:auto:off", () => {
         state.auto = false;
+        state.save();
         if (logger) {
             logger.info("Auto mode: off")
         }
