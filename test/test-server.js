@@ -63,6 +63,18 @@ describe("#/api/control", () => {
         });
         postState("close").end();
     });
+
+    it("should respond 200 to update request", (done) => {
+        postState("update")
+            .expect(200, done);
+    });
+
+    it("should raise control:update event", (done) => {
+        emitter.once("control:update", () => {
+            done();
+        });
+        postState("update").end();
+    });
 });
 
 describe("#/api/auto", () => {

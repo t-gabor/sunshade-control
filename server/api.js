@@ -23,6 +23,9 @@ module.exports = (emitter, state, logger) => {
         } else if (req.body.state === "close") {
             emitter.emit("control:manual:close");
             res.sendStatus(200);
+        } else if (req.body.state === "update") {
+            emitter.emit("control:update");
+            res.sendStatus(200);
         } else {
             badRequest(req.body, next);
         }

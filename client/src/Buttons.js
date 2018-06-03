@@ -11,6 +11,7 @@ export default (props) => (
         <div className="button-group" >
             <RaisedButton className="open" disabled={props.auto} label="Close" secondary={true} onTouchTap={(event) => props.postState("close")} />
             <RaisedButton className="close" disabled={props.auto} label="Open" primary={true} onTouchTap={(event) => props.postState("open")} />            
+            <RaisedButton className="update" label="Update" primary={true} onTouchTap={(event) => props.postState("update")} />
         </div>
     </div>
 );

@@ -3,6 +3,11 @@
     display: inline-block;
 }
 
+.update {
+    float: right;
+    margin-right: 12px;
+}
+
 .open {
     float: right;
 }

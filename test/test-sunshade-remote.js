@@ -7,7 +7,8 @@ describe("sunshadeRemote", () => {
     let buttons;
 
     const state = {
-        auto: true
+        auto: true,
+        save: () => {}
     };
 
     beforeEach(() => {
