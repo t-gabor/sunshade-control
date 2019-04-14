@@ -15,6 +15,7 @@ const logger = {
 const server = require("../server/server")(emitter, state, logger);
 
 describe("#/api/control", () => {
+
     after(() => {
         server.server.close();
     });
@@ -51,17 +52,19 @@ describe("#/api/control", () => {
     });
 
     it("should raise control:manual:open event", (done) => {
+        var error = "no event emitted"
         emitter.once("control:manual:open", () => {
-            done();
+            error = undefined
         });
-        postState("open").end();
+        postState("open").end(() => done(error));
     });
 
     it("should raise control:manual:close event", (done) => {
+        var error = "no event emitted"
         emitter.once("control:manual:close", () => {
-            done();
+            error = undefined
         });
-        postState("close").end();
+        postState("close").end(() => done(error));
     });
 
     it("should respond 200 to update request", (done) => {
@@ -70,10 +73,11 @@ describe("#/api/control", () => {
     });
 
     it("should raise control:update event", (done) => {
+        var error = "no event emitted"
         emitter.once("control:update", () => {
-            done();
+            error = undefined
         });
-        postState("update").end();
+        postState("update").end(() => done(error));
     });
 });
 
@@ -108,17 +112,19 @@ describe("#/api/auto", () => {
     });
 
     it("should raise control:auto:on event", (done) => {
+        var error = "no event emitted"
         emitter.once("control:auto:on", () => {
-            done();
+            error = undefined
         });
-        postState("on").end();
+        postState("on").end(() => done(error));
     });
 
     it("should raise control:auto:off event", (done) => {
+        var error = "no event emitted"
         emitter.once("control:auto:off", () => {
-            done();
+            error = undefined
         });
-        postState("off").end();
+        postState("off").end(() => done(error));
     });
 
     it("should respond on to GET if auto mode on.", (done) => {

@@ -55,6 +55,13 @@ describe("ruleEngine", () => {
         eventEmitter.emit("control:update");
     });
 
+    it("emits close event if weatherCode is undefined", (done) => {
+        weather.weatherCode = undefined;
+
+        eventEmitter.on("control:close", done);
+        eventEmitter.emit("control:update");
+    });
+
     it("emits nothing if windSpeed 18", (done) => {
         setTimeout(done, 500);
         weather.windSpeed = 18;
