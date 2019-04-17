@@ -37,7 +37,7 @@ jsonfile.readFile(stateFile, (err, obj) => {
 
 const emitter = new EventEmitter();
 
-const getWeather = require("./getWeatherWunderground")(logger);
+const getWeather = require("./getWeatherDarkSky")(logger);
 require("./rule-engine")(emitter, getWeather, state);
 require("./sunshade-remote")(emitter, buttons, state, logger);
 require("./scheduler")(emitter, undefined, logger);

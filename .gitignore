@@ -4,4 +4,5 @@ node_modules
 config/wunderground.json
 config/auth0.json
 config/auth0.server.json
+config/darksky.json
 info.log
