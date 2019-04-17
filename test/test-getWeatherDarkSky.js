@@ -21,7 +21,7 @@ let mockSettings = {
 let mockDarkSky = {
     latitude: (lat) => { assert.equal(lat, mockSettings.position.latitude); return mockDarkSky },
     longitude: (long) => { assert.equal(long, mockSettings.position.longitude); return mockDarkSky },
-    units: (u) => { assert.equal(u, "si"); return mockDarkSky },
+    units: (u) => { assert.equal(u, "ca"); return mockDarkSky },
     language: (l) => { assert.equal(l, "en"); return mockDarkSky },
     get: () => {
         return promise

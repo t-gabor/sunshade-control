@@ -20,7 +20,7 @@ function extractWeatherData(data) {
 module.exports = logger => (cb) => {
     darkSky.latitude(settings.position.latitude)
         .longitude(settings.position.longitude)
-        .units('si')
+        .units('ca')
         .language('en')
         .get()
         .then(response => {
