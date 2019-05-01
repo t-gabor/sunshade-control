@@ -8,20 +8,20 @@
 # Short-Description: Sunshade control.
 # Description:       A node.js server controlling sunshade through GPIO pins.
 ### END INIT INFO
-
 RUN_AS=pi
 APPJS="/home/$RUN_AS/sunshade-control/server/app.js"
 PORT=1080
-
-export PATH=$PATH:/usr/local/bin
-export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+. /home/pi/.nvm/nvm.sh
+NVM_NODE_PATH=/home/pi/.nvm/versions/node/v10.15.3
+NODE=$NVM_NODE_PATH/bin/node
+FOREVER=$NVM_NODE_PATH/bin/forever
 
 case "$1" in
   start)
-    sudo -u $RUN_AS PORT=$PORT NODE_ENV="production" forever start -p /home/$RUN_AS/.forever $APPJS
+    sudo -u $RUN_AS PORT=$PORT NODE_ENV="production" $NODE $FOREVER start -p /home/$RUN_AS/.forever $APPJS
     ;;
   stop)
-    exec sudo -u $RUN_AS forever stop $APPJS
+    sudo -u $RUN_AS $NODE $FOREVER stop $APPJS
     ;;
   *)
     echo "Usage: $0 {start|stop}"
