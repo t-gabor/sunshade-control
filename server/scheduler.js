@@ -28,7 +28,7 @@ function scheduler(eventEmitter, options = defaultOptions, logger) {
         if (logger) {
             logger.info("End of Day, closing.");
         }
-        eventEmitter.emit("control:close");
+        eventEmitter.emit("control:manual:close");
     });
 
     return {

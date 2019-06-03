@@ -38,7 +38,7 @@ describe("scheduler", () => {
 
     it("emits control:close at end of day", (done) => {
         clock.tick("06:59:00");
-        eventEmitter.on("control:close", () => {
+        eventEmitter.on("control:manual:close", () => {
             done();
         });
         clock.tick("00:01:00");
