@@ -1,6 +1,6 @@
 const DarkSky = require('dark-sky');
 const settings = require('../config/darksky.json');
-require('node-fetch');
+const fetch = require('node-fetch');
 
 const darkSky = new DarkSky(settings.apiKey);
 
@@ -27,7 +27,6 @@ module.exports = logger => (cb) => {
         .get()
         .then(response => {
             const data = extractWeatherData(response);
-
             const localDataUrl = process.env.LOCALWEATHERDATAURL;
             if (localDataUrl) {
                 return fetch(localDataUrl)

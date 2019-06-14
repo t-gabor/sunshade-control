@@ -1,4 +1,4 @@
-const fetchMock = require('fetch-mock');
+const fetchMock = require('fetch-mock').sandbox();
 const mock = require("mock-require");
 const darkSkyResult = require("./New_York.json");
 const assert = require("assert");
@@ -25,6 +25,7 @@ let mockDarkSky = {
 
 mock("dark-sky", function (apikey) { assert.equal(apikey, mockSettings.apiKey); return mockDarkSky });
 mock("../config/darksky.json", mockSettings);
+mock("node-fetch", fetchMock);
 
 let localData = {
     wind: 12,

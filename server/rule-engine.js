@@ -52,7 +52,7 @@ const defaultRules = [
     weatherCodeRule
 ];
 
-function ruleEngine(emitter, getWeather, state) {
+function ruleEngine(emitter, getWeather, state, logger) {
 
     if (!state.rules) {
         state.rules = defaultRules;
@@ -60,6 +60,9 @@ function ruleEngine(emitter, getWeather, state) {
 
     function processWeather(error, weather) {
         if (error) {
+            if(logger) {
+                logger.error(error);
+            }
             return;
         }
         state.weather = weather;
