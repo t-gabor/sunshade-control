@@ -48,8 +48,8 @@ describe("ruleEngine", () => {
         eventEmitter.emit("control:update");
     });
 
-    it("emits close event if weatherCode is cloudy", (done) => {
-        weather.weatherCode = "cloudy";
+    it("emits close event if weatherCode is rain", (done) => {
+        weather.weatherCode = "rain";
 
         eventEmitter.on("control:close", done);
         eventEmitter.emit("control:update");

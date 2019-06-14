@@ -35,7 +35,7 @@ const precipIntensityRule = {
 
 const weatherCodeRule = {
     condition: function(R) {
-        R.when(!["clear", "mostlysunny", "partlycloudy", "sunny"].includes(this.weatherCode));
+        R.when(!["clear", "mostlysunny", "partlycloudy", "sunny", "cloudy"].includes(this.weatherCode));
     },
     consequence: function(R) {
         this.event = "control:close";

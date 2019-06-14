@@ -1,9 +1,10 @@
 const DarkSky = require('dark-sky');
-const settings = require("../config/darksky.json");
+const settings = require('../config/darksky.json');
+require('node-fetch');
 
 const darkSky = new DarkSky(settings.apiKey);
 
-var iconCodeMap = new Map([['clear-day', 'clear'], ['partly-cloudy-day', 'partlycloudy']]);
+var iconCodeMap = new Map([['clear-day', 'clear'], ['partly-cloudy-day', 'partlycloudy'], ['fog', 'partlycloudy'], ['cloudy', 'cloudy']]);
 
 function extractWeatherData(data) {
     const co = data.currently;
@@ -12,7 +13,8 @@ function extractWeatherData(data) {
         temperature: co.temperature,
         summary: co.summary,
         weatherCode: iconCodeMap.get(co.icon),
-        precipIntensity: co.precipIntensity + co.precipProbability + (co.nearestStormDistance == null || co.nearestStormDistance > 25) ? 0 : 5,
+        precipIntensity: co.nearestStormDistance == null || co.nearestStormDistance > 25 ? 0 : 5,
+        nearestStormDistance: co.nearestStormDistance,
         observationTime: co.time
     };
 }
@@ -25,11 +27,33 @@ module.exports = logger => (cb) => {
         .get()
         .then(response => {
             const data = extractWeatherData(response);
+
+            const localDataUrl = process.env.LOCALWEATHERDATAURL;
+            if (localDataUrl) {
+                return fetch(localDataUrl)
+                    .then(response => response.json())
+                    .then(localData => {
+                        data.windSpeed = localData.wind;
+                        data.temperature = localData.temp;
+                        if(!data.nearestStormDistance || data.nearestStormDistance > 30) {
+                            data.precipIntensity = localData.precipIntensity;
+                        }
+
+                        if (logger) {
+                            logger.info(data);
+                        }
+
+                        return data;
+                    })
+                    .catch(err => cb(err))
+            }
+
             if (logger) {
                 logger.info(data);
             }
 
-            cb(null, data);
+            return data;
         })
-        .catch (err => { cb(err) });
+        .then(data => cb(null, data))
+        .catch(err => { cb(err) });
 };

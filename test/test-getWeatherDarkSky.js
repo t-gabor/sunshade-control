@@ -1,14 +1,9 @@
+const fetchMock = require('fetch-mock');
 const mock = require("mock-require");
 const darkSkyResult = require("./New_York.json");
 const assert = require("assert");
 
 let mockedResult;
-
-let promise = {
-    then: function (cb) {
-        cb(mockedResult)
-    }
-};
 
 let mockSettings = {
     apiKey: "xxxxxxxxxxxx",
@@ -24,16 +19,28 @@ let mockDarkSky = {
     units: (u) => { assert.equal(u, "ca"); return mockDarkSky },
     language: (l) => { assert.equal(l, "en"); return mockDarkSky },
     get: () => {
-        return promise
+        return Promise.resolve(mockedResult)
     }
 };
 
 mock("dark-sky", function (apikey) { assert.equal(apikey, mockSettings.apiKey); return mockDarkSky });
 mock("../config/darksky.json", mockSettings);
 
+let localData = {
+    wind: 12,
+    temp: 26,
+    precipIntensity: 3
+}
+
 const getWeatherDarkSky = require("../server/getWeatherDarkSky")();
 
 describe("getWeatherDarkSky", () => {
+
+    beforeEach( () => {
+        process.env.LOCALWEATHERDATAURL = '';
+        fetchMock.restore();
+    });
+
     it("returns weather data", (done) => {
         mockedResult = darkSkyResult;
         getWeatherDarkSky((error, response) => {
@@ -41,9 +48,32 @@ describe("getWeatherDarkSky", () => {
                 windSpeed: 9.56,
                 temperature: 50.88,
                 summary: "Overcast",
-                weatherCode: undefined,
+                weatherCode: 'cloudy',
                 precipIntensity: 0,
-                observationTime: 1555095514
+                observationTime: 1555095514,
+                nearestStormDistance: 170
+            });
+            done();
+        });
+    });
+
+    it("returns weather data merged with local data if LOCALWEATHERDATAURL is defined", (done) => {
+
+        process.env.LOCALWEATHERDATAURL = 'http://example.com:3001';
+
+        fetchMock.mock('http://example.com:3001', localData);
+
+        mockedResult = JSON.parse(JSON.stringify(darkSkyResult));
+        mockedResult.currently.nearestStormDistance = null;
+        getWeatherDarkSky((error, response) => {
+            assert.deepEqual(response, {
+                windSpeed: localData.wind,
+                temperature: localData.temp,
+                summary: "Overcast",
+                weatherCode: 'cloudy',
+                precipIntensity: localData.precipIntensity,
+                observationTime: 1555095514,
+                nearestStormDistance: null
             });
             done();
         });
@@ -65,6 +95,16 @@ describe("getWeatherDarkSky", () => {
 
         getWeatherDarkSky((error, response) => {
             assert.equal(response.weatherCode, 'partlycloudy');
+            done();
+        });
+    });
+
+    it("returns cloudy weatherCode if icon is cloudy", (done) => {
+        mockedResult = JSON.parse(JSON.stringify(darkSkyResult));
+        mockedResult.currently.icon = 'cloudy';
+
+        getWeatherDarkSky((error, response) => {
+            assert.equal(response.weatherCode, 'cloudy');
             done();
         });
     });
