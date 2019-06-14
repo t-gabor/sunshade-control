@@ -20,7 +20,13 @@ class Sunshade extends Component {
     componentDidMount() {
         this.getAuto();
         this.getWeather();
+
+        this.interval = setInterval(() => this.getWeather(), 3000);
     }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+      }
 
     render() {
         return (
