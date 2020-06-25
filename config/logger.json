@@ -1,6 +1,6 @@
 [
     {
         "level": "info",
-        "path": "info.log"
+        "path": "/home/pi/sunshade-control/info.log"
     }
 ]

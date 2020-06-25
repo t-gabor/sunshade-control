@@ -15,7 +15,7 @@ const buttons = (process.arch !== "arm") ? {
     close: () => { logger.info("Close."); }
 } : require("./gpio-buttons")(logger);
 
-const stateFile = "/tmp/sunshade_control.auto.json"
+const stateFile = "/home/pi/sunshade_control.auto.json"
 
 const state = {
     auto: true,
