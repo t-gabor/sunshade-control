@@ -18,7 +18,8 @@ function server(emitter, state, logger) {
         const auth0 = require("../config/auth0.server.json");
         const authenticate = jwt({
             secret: auth0.clientSecret,
-            audience: auth0.clientId
+            audience: auth0.clientId,
+            algorithms: ['HS256']
         });
 
         app.use("/api", authenticate);

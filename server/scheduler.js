@@ -5,9 +5,9 @@ const schedule = require("node-schedule");
 setInterval(() => {}, 60000);
 
 const defaultOptions = {
-    fromHour: 9,
+    fromHour: 10,
     toHour: 18,
-    inteval: 15
+    inteval: 5
 };
 
 function scheduler(eventEmitter, options = defaultOptions, logger) {
@@ -23,7 +23,7 @@ function scheduler(eventEmitter, options = defaultOptions, logger) {
 
     const endOfDayRule = new schedule.RecurrenceRule();
     endOfDayRule.hour = options.toHour;
-    endOfDayRule.minute = 0;
+    endOfDayRule.minute = 5;
     const endOfDayJob = schedule.scheduleJob(endOfDayRule, () => {
         if (logger) {
             logger.info("End of Day, closing.");
