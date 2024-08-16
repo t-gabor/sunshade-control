@@ -1,9 +1,6 @@
 {
   "name": "sunshade-control",
   "version": "0.0.1",
-  "engines": {
-    "node": "6.8.0"
-  },
   "description": "An automatic weather aware sunshade control web app to be run on RPi, with Node.js. A remote supporting open/close commands should be hooked up on the GPIO.",
   "main": "server/app.js",
   "scripts": {
@@ -24,33 +21,24 @@
   },
   "homepage": "https://github.com/t-gabor/sunshade-control#readme",
   "dependencies": {
-    "body-parser": "1.18.3",
+    "body-parser": "1.20.2",
     "bunyan": "1.8.12",
     "cors": "2.8.5",
-    "dark-sky": "1.1.5",
-    "express": "4.16.4",
-    "express-jwt": "6.0.0",
+    "express": "4.19.2",
+    "express-jwt": "8.4.1",
     "jsonfile": "5.0.0",
-    "method-override": "^3.0.0",
-    "node-fetch": "^2.6.7",
+    "method-override": "3.0.0",
+    "node-fetch": "2.6.7",
     "node-rules": "5.0.0",
     "node-schedule": "1.3.2",
-    "onoff": "4.1.1"
+    "onoff": "6.0.3"
   },
   "devDependencies": {
     "concurrently": "3.4.0",
     "cross-env": "3.2.4",
-    "eslint": "4.18.2",
-    "eslint-config-airbnb": "12.0.0",
-    "eslint-config-standard": "6.2.0",
-    "eslint-plugin-import": "1.16.0",
-    "eslint-plugin-jsx-a11y": "2.2.3",
-    "eslint-plugin-promise": "3.0.0",
-    "eslint-plugin-react": "6.4.1",
-    "eslint-plugin-standard": "2.0.1",
     "fetch-mock": "^7.3.3",
     "lolex": "1.5.1",
-    "mocha": "^6.1.4",
+    "mocha": "10.7.3",
     "mock-require": "1.3.0",
     "supertest": "^4.0.2"
   }

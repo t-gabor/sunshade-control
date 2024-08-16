@@ -1,38 +1,47 @@
-import React, { Component } from 'react';
-import AppBar from 'material-ui/AppBar';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import { useState, useEffect } from 'react'
 
-import AppBarButton from './AppBarButton';
-import Sunshade from './Sunshade';
-import AuthService from './AuthService';
-import auth0 from '../../config/auth0.json';
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { ThemeSupa } from '@supabase/auth-ui-shared'
 
-import './App.css';
+import { PrimeReactProvider } from 'primereact/api';
+import { Toolbar } from 'primereact/toolbar';
+import { Button } from 'primereact/button';
 
-injectTapEventPlugin();
+import SunshadeControl from './SunshadeControl';
 
-class App extends Component {
+import 'primereact/resources/themes/lara-light-cyan/theme.css';
 
-  constructor(props) {
-    super(props);
+import supabaseConfig from './supabase.json';
 
-    this.auth = new AuthService(auth0.clientId, auth0.domain, () => this.forceUpdate());
+const supabase = createClient(supabaseConfig.project_url, supabaseConfig.public_anon_key)
+
+export default function App() {
+
+  const [session, setSession] = useState(null)
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (!session) {
+    return (<Auth supabaseClient={supabase} appearance={{theme: ThemeSupa}} providers={[]} />)
   }
 
-  render() {
-    return (
-      <MuiThemeProvider>
-        <div>
-          <AppBar title="Sunshade Control"
-            iconElementRight={this.auth.loggedIn() ?
-              <AppBarButton label="Logout" onTouchTap={() => this.auth.logout()} /> :
-              <AppBarButton label="Login" onTouchTap={() => this.auth.login()} />} />
-          {this.auth.loggedIn() ? <Sunshade auth={this.auth} /> : <div className="login-please">Please log in.</div>}
-        </div>
-      </MuiThemeProvider>
-    );
-  }
+  return (
+    <PrimeReactProvider>
+      <Toolbar end={<Button label="Logout" onClick={() => supabase.auth.signOut()} />} />
+      <SunshadeControl />
+    </PrimeReactProvider>
+  );
 }
-
-export default App;

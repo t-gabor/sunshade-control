@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const jwt = require("express-jwt");
+const { expressjwt: jwt } = require("express-jwt");
 const api = require("./api");
 
 function server(emitter, state, logger) {
@@ -12,18 +12,15 @@ function server(emitter, state, logger) {
     app.use(bodyParser.json());
     app.use(methodOverride());
 
-    if (process.env.NODE_ENV === "production") {
-        app.use(express.static(__dirname + "/../client/build"));
+    app.use(express.static(__dirname + "/../client/build"));
 
-        const auth0 = require("../config/auth0.server.json");
-        const authenticate = jwt({
-            secret: auth0.clientSecret,
-            audience: auth0.clientId,
-            algorithms: ['HS256']
-        });
+    const supabaseConfig = require("../config/supabase.server.json");
+    const authenticate = jwt({
+        secret: supabaseConfig.jwtSecret,
+        algorithms: ['HS256']
+    });
 
-        app.use("/api", authenticate);
-    }
+    app.use("/api", authenticate);
 
     app.use("/api", api(emitter, state, logger));
 

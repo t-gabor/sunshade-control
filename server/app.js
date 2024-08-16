@@ -15,7 +15,7 @@ const buttons = (process.arch !== "arm") ? {
     close: () => { logger.info("Close."); }
 } : require("./gpio-buttons")(logger);
 
-const stateFile = "/home/pi/sunshade_control.auto.json"
+const stateFile = "./sunshade_control.auto.json"
 
 const state = {
     auto: true,
@@ -37,8 +37,10 @@ jsonfile.readFile(stateFile, (err, obj) => {
 
 const emitter = new EventEmitter();
 
-const getWeather = require("./getWeatherDarkSky")(logger);
+const getWeather = require("./getWeather")(logger);
 require("./rule-engine")(emitter, getWeather, state, logger);
 require("./sunshade-remote")(emitter, buttons, state, logger);
 require("./scheduler")(emitter, undefined, logger);
 require("./server")(emitter, state, logger);
+
+emitter.emit("control:update");
