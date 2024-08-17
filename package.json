@@ -5,10 +5,9 @@
   "main": "server/app.js",
   "scripts": {
     "start": "dotenvx run -- concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server/app.js",
-    "client": "node start-client.js",
     "test": "mocha --exit",
-    "production": "cross-env NODE_ENV=production npm run server"
+    "production": "cross-env NODE_ENV=production npm run server",
+    "build": "dotenvx run -- npm run build --prefix client"
   },
   "repository": {
     "type": "git",

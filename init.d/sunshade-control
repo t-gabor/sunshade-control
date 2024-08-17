@@ -9,16 +9,18 @@
 # Description:       A node.js server controlling sunshade through GPIO pins.
 ### END INIT INFO
 RUN_AS=pi
-APPJS="/home/$RUN_AS/sunshade-control/server/app.js"
+APPFOLDER="/home/$RUN_AS/sunshade-control"
+APPJS=$APPFOLDER/server/app.js
+DOTENVX=/usr/local/bin/dotenvx
 PORT=1080
 . /home/pi/.nvm/nvm.sh
-NVM_NODE_PATH=/home/pi/.nvm/versions/node/v10.15.3
+NVM_NODE_PATH=/home/pi/.nvm/versions/node/v16.15.1
 NODE=$NVM_NODE_PATH/bin/node
 FOREVER=$NVM_NODE_PATH/bin/forever
 
 case "$1" in
   start)
-    sudo -u $RUN_AS PORT=$PORT NODE_ENV="production" $NODE $FOREVER start -p /home/$RUN_AS/.forever $APPJS
+    sudo -u $RUN_AS PORT=$PORT NODE_ENV="production" $DOTENVX run -f $APPFOLDER/.env.pi -- $NODE $FOREVER start -p /home/$RUN_AS/.forever $APPJS
     ;;
   stop)
     sudo -u $RUN_AS $NODE $FOREVER stop $APPJS
