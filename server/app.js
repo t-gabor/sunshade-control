@@ -41,5 +41,3 @@ require("./rule-engine")(emitter, getWeather, state, logger);
 require("./sunshade-remote")(emitter, buttons, state, logger);
 require("./scheduler")(emitter, undefined, logger);
 require("./server")(emitter, state, logger);
-
-emitter.emit("control:update");
