@@ -1,9 +1,7 @@
 node_modules
 .npm
 .vscode
-config/wunderground.json
-config/supabase.server.json
-config/darksky.json
-info.log
-client/supabase.json
 sunshade_control.auto.json
+.env.keys
+.env.pi.keys
+

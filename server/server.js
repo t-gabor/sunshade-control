@@ -14,9 +14,8 @@ function server(emitter, state, logger) {
 
     app.use(express.static(__dirname + "/../client/build"));
 
-    const supabaseConfig = require("../config/supabase.server.json");
     const authenticate = jwt({
-        secret: supabaseConfig.jwtSecret,
+        secret: process.env.SUPABASE_JWT_SECRET,
         algorithms: ['HS256']
     });
 

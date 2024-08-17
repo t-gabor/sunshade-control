@@ -4,7 +4,7 @@
   "description": "An automatic weather aware sunshade control web app to be run on RPi, with Node.js. A remote supporting open/close commands should be hooked up on the GPIO.",
   "main": "server/app.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "start": "dotenvx run -- concurrently \"npm run server\" \"npm run client\"",
     "server": "node server/app.js",
     "client": "node start-client.js",
     "test": "mocha --exit",

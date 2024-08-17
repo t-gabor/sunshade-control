@@ -1,10 +1,9 @@
 const EventEmitter = require('events');
 const jsonfile = require('jsonfile');
 
-const loggerStreams = require("../config/logger.json");
 const logger = require("bunyan").createLogger({
     name: "sunshade-control",
-    streams: [...loggerStreams, {
+    streams: [{
         level: "info",
         stream: process.stdout            // log INFO and above to stdout
     }]
@@ -15,7 +14,7 @@ const buttons = (process.arch !== "arm") ? {
     close: () => { logger.info("Close."); }
 } : require("./gpio-buttons")(logger);
 
-const stateFile = "./sunshade_control.auto.json"
+const stateFile = process.env.SUNSHADE_AUTO_CONFIG
 
 const state = {
     auto: true,
@@ -24,7 +23,7 @@ const state = {
         const obj = { auto: this.auto };
         jsonfile.writeFile(stateFile, obj, (err) => { if (err) logger.error(err) });
     }
-};
+}
 
 jsonfile.readFile(stateFile, (err, obj) => {
     if (err) {
