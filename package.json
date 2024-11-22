@@ -5,7 +5,7 @@
   "main": "server/app.js",
   "scripts": {
     "start": "dotenvx run -- concurrently \"npm run server\" \"npm run client\"",
-    "test": "mocha --exit",
+    "test": "dotenvx run -f .env.test -- mocha --exit",
     "production": "cross-env NODE_ENV=production npm run server",
     "build": "dotenvx run -- npm run build --prefix client"
   },
@@ -39,6 +39,7 @@
     "lolex": "1.5.1",
     "mocha": "10.7.3",
     "mock-require": "1.3.0",
-    "supertest": "^4.0.2"
+    "supertest": "^7.0.0",
+    "jsonwebtoken": "9.0.2"
   }
 }

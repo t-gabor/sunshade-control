@@ -7,7 +7,7 @@ describe("scheduler", () => {
     const options = {
         fromHour: 10,
         toHour: 16,
-        inteval: 10
+        interval: 10
     };
 
     let eventEmitter;
@@ -37,11 +37,11 @@ describe("scheduler", () => {
     });
 
     it("emits control:close at end of day", (done) => {
-        clock.tick("06:59:00");
+        clock.tick("07:00:00");
         eventEmitter.on("control:manual:close", () => {
             done();
         });
-        clock.tick("00:01:00");
+        clock.tick("00:05:00");
     });
 
     it("no update event before fromHour", () => {

@@ -1,5 +1,6 @@
 const request = require("supertest");
 const EventEmitter = require('events');
+const jwt = require('jsonwebtoken');
 
 const emitter = new EventEmitter();
 
@@ -12,6 +13,7 @@ const logger = {
     error: () => { }
 };
 
+const token = jwt.sign({ foo: 'bar' }, process.env.SUPABASE_JWT_SECRET, { algorithm: 'HS256' });
 const server = require("../server/server")(emitter, state, logger);
 
 describe("#/api/control", () => {
@@ -23,14 +25,16 @@ describe("#/api/control", () => {
     it("should respond 404 to GET", (done) => {
         request(server.app)
             .get("/api/control")
+            .set('Authorization', `Bearer ${token}`)
             .expect(404, done);
     });
 
     it("should respond 400 to marlformed request", (done) => {
         request(server.app)
             .post("/api/control")
-            .set("Content-Type", "application/json")
             .send("a=1")
+            .set("Content-Type", "application/json")
+            .set('Authorization', `Bearer ${token}`)
             .expect(400, done);
     });
 
@@ -38,6 +42,7 @@ describe("#/api/control", () => {
         return request(server.app)
             .post("/api/control")
             .set("Content-Type", "application/json")
+            .set('Authorization', `Bearer ${token}`)
             .send(`{"state": "${value}"}`);
     }
 
@@ -89,6 +94,7 @@ describe("#/api/auto", () => {
     it("should respond 400 to marlformed request", (done) => {
         request(server.app)
             .post("/api/auto")
+            .set('Authorization', `Bearer ${token}`)
             .set("Content-Type", "application/json")
             .send("a=1")
             .expect(400, done);
@@ -97,6 +103,7 @@ describe("#/api/auto", () => {
     function postState(value) {
         return request(server.app)
             .post("/api/auto")
+            .set('Authorization', `Bearer ${token}`)
             .set("Content-Type", "application/json")
             .send(`{"state": "${value}"}`);
     }
@@ -131,6 +138,7 @@ describe("#/api/auto", () => {
         state.auto = true;
         request(server.app)
             .get("/api/auto")
+            .set('Authorization', `Bearer ${token}`)
             .expect({ state: "on" }, done);
     });
 
@@ -138,6 +146,7 @@ describe("#/api/auto", () => {
         state.auto = false;
         request(server.app)
             .get("/api/auto")
+            .set('Authorization', `Bearer ${token}`)
             .expect({ state: "off" }, done);
     });
 });
@@ -155,6 +164,7 @@ describe("#/api/weather", () => {
 
         request(server.app)
             .get("/api/weather")
+            .set('Authorization', `Bearer ${token}`)
             .expect(state.weather, done);
     });
 
@@ -163,6 +173,7 @@ describe("#/api/weather", () => {
 
         request(server.app)
             .get("/api/weather")
+            .set('Authorization', `Bearer ${token}`)
             .expect({}, done);
     });
 });
