@@ -2,6 +2,6 @@ node_modules
 .npm
 .vscode
 sunshade_control.auto.json
+somfy.json
 .env.keys
 .env.pi.keys
-

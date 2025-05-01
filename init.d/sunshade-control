@@ -14,7 +14,7 @@ APPJS=$APPFOLDER/server/app.js
 DOTENVX=/usr/local/bin/dotenvx
 PORT=1080
 . /home/pi/.nvm/nvm.sh
-NVM_NODE_PATH=/home/pi/.nvm/versions/node/v16.15.1
+NVM_NODE_PATH=/home/pi/.nvm/versions/node/v20.19.1
 NODE=$NVM_NODE_PATH/bin/node
 FOREVER=$NVM_NODE_PATH/bin/forever
 

@@ -9,10 +9,7 @@ const logger = require("bunyan").createLogger({
     }]
 });
 
-const buttons = (process.arch !== "arm") ? {
-    open: () => { logger.info("Open."); },
-    close: () => { logger.info("Close."); }
-} : require("./gpio-buttons")(logger);
+const buttons = require("./buttons")(logger);
 
 const stateFile = process.env.SUNSHADE_AUTO_CONFIG
 
