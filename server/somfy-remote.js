@@ -106,7 +106,8 @@ module.exports = logger => {
         });
 
         pigpio.connect();
-        await ready;
+        const info = await ready;
+        logger.debug(info);
         const radioPin = pigpio.gpio(RADIO_PIN);
         await radioPin.modeSet('output');
 
