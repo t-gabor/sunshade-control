@@ -1,7 +1,7 @@
 # sunshade-control
 [![Build][travis-image]][travis-url]
 
-An automatic weather aware sunshade control web app to be run on RPi, with Node.js.
+An automatic weather aware sunshade control web app to be run on a Raspberry Pi, with Node.js.
 
 # Somfy 
 Earlier a remote supporting open/close commands was hooked up on the GPIO.  
